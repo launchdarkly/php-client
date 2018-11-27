@@ -7,8 +7,9 @@ use LaunchDarkly\FeatureFlag;
 use LaunchDarkly\LDUser;
 use LaunchDarkly\LDUserBuilder;
 use LaunchDarkly\Segment;
+use PHPUnit\Framework\TestCase;
 
-class FeatureFlagTest extends \PHPUnit_Framework_TestCase
+class FeatureFlagTest extends TestCase
 {
     private static $json1 = "{
   \"key\": \"integration.feature.0\",
@@ -146,7 +147,7 @@ class FeatureFlagTest extends \PHPUnit_Framework_TestCase
         $this->assertInstanceOf(FeatureFlag::class, FeatureFlag::decode(\GuzzleHttp\json_decode(FeatureFlagTest::$json1, true)));
         $this->assertInstanceOf(FeatureFlag::class, FeatureFlag::decode(\GuzzleHttp\json_decode(FeatureFlagTest::$json2, true)));
     }
-    
+
     public function dataDecodeMulti()
     {
         return [
@@ -182,7 +183,7 @@ class FeatureFlagTest extends \PHPUnit_Framework_TestCase
             ],
         ];
     }
-    
+
     /**
      * @dataProvider dataDecodeMulti
      * @param array $feature
@@ -190,7 +191,7 @@ class FeatureFlagTest extends \PHPUnit_Framework_TestCase
     public function testDecodeMulti(array $feature)
     {
         $featureFlag = FeatureFlag::decode($feature);
-        
+
         self::assertInstanceOf(FeatureFlag::class, $featureFlag);
     }
 
@@ -701,7 +702,7 @@ class FeatureFlagTest extends \PHPUnit_Framework_TestCase
     public function testSegmentMatchClauseFallsThroughWithNoErrorsIfSegmentNotFound()
     {
         $requester = new MockFeatureRequesterForSegment();
-        
+
         $feature = $this->makeBooleanFeatureWithSegmentMatch('segkey');
 
         $ub = new LDUserBuilder('foo');

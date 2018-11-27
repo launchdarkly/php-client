@@ -3,8 +3,9 @@
 namespace LaunchDarkly\Tests;
 
 use LaunchDarkly\Operators;
+use PHPUnit\Framework\TestCase;
 
-class OperatorsTest extends \PHPUnit_Framework_TestCase
+class OperatorsTest extends TestCase
 {
     public function testIn()
     {

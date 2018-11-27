@@ -15,11 +15,8 @@ php-docker-template: &php-docker-template
   steps:
     - checkout
     - run:
-        name: validate composer.json
-        command: composer validate
-    - run:
-        name: install current dependencies
-        command: composer install --no-progress
+        name: update and validate composer.json
+        command: composer update && composer validate
     - run:
         name: run tests with current dependency versions
         command: vendor/bin/phpunit --log-junit ~/phpunit/junit.xml --coverage-text tests
@@ -70,11 +67,8 @@ jobs:
             sudo php /tmp/composer-setup.php --install-dir=/usr/local/bin --filename=composer
       - checkout
       - run:
-          name: validate composer.json
-          command: composer validate
-      - run:
-          name: install current dependencies
-          command: composer install --no-progress
+          name: update and validate composer.json
+          command: composer update && composer validate
       - run:
           name: run php-cs-fixer
           command: vendor/bin/php-cs-fixer fix --diff --dry-run --verbose

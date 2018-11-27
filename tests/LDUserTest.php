@@ -3,8 +3,9 @@ namespace LaunchDarkly\Tests;
 
 use LaunchDarkly\LDUser;
 use LaunchDarkly\LDUserBuilder;
+use PHPUnit\Framework\TestCase;
 
-class LDUserTest extends \PHPUnit_Framework_TestCase
+class LDUserTest extends TestCase
 {
     public function testLDUserKey()
     {
@@ -23,9 +24,9 @@ class LDUserTest extends \PHPUnit_Framework_TestCase
     public function testEmptyCustom()
     {
         $builder = new LDUserBuilder("foo@bar.com");
-        
+
         $user = $builder->build();
-        
+
         $this->assertInstanceOf(LDUser::class, $user);
     }
 

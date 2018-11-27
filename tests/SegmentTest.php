@@ -3,8 +3,9 @@ namespace LaunchDarkly\Tests;
 
 use LaunchDarkly\LDUserBuilder;
 use LaunchDarkly\Segment;
+use PHPUnit\Framework\TestCase;
 
-class SegmentTest extends \PHPUnit_Framework_TestCase
+class SegmentTest extends TestCase
 {
     public function testExplicitIncludeUser()
     {

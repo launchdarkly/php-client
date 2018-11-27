@@ -9,8 +9,9 @@ use LaunchDarkly\LDClient;
 use LaunchDarkly\LDUser;
 use LaunchDarkly\LDUserBuilder;
 use Psr\Log\LoggerInterface;
+use PHPUnit\Framework\TestCase;
 
-class LDClientTest extends \PHPUnit_Framework_TestCase
+class LDClientTest extends TestCase
 {
     public function testDefaultCtor()
     {
@@ -305,7 +306,7 @@ class LDClientTest extends \PHPUnit_Framework_TestCase
         $builder = new LDUserBuilder(3);
         $user = $builder->build();
         $state = $client->allFlagsState($user);
-         
+
         $this->assertTrue($state->isValid());
         $this->assertEquals(array('feature' => 'off'), $state->toValuesMap());
         $expectedState = array(
@@ -351,7 +352,7 @@ class LDClientTest extends \PHPUnit_Framework_TestCase
         $builder = new LDUserBuilder(3);
         $user = $builder->build();
         $state = $client->allFlagsState($user, array('withReasons' => true));
-         
+
         $this->assertTrue($state->isValid());
         $this->assertEquals(array('feature' => 'off'), $state->toValuesMap());
         $expectedState = array(
@@ -396,14 +397,16 @@ class LDClientTest extends \PHPUnit_Framework_TestCase
         $builder = new LDUserBuilder(3);
         $user = $builder->build();
         $state = $client->allFlagsState($user, array('clientSideOnly' => true));
-         
+
         $this->assertTrue($state->isValid());
         $this->assertEquals(array('client-side-1' => 'value1', 'client-side-2' => 'value2'), $state->toValuesMap());
     }
 
+    /**
+     * @expectedException InvalidArgumentException
+     */
     public function testOnlyValidFeatureRequester()
     {
-        $this->setExpectedException(InvalidArgumentException::class);
         new LDClient("BOGUS_SDK_KEY", ['feature_requester_class' => \stdClass::class]);
     }
 
@@ -413,29 +416,29 @@ class LDClientTest extends \PHPUnit_Framework_TestCase
         $user = new LDUser("Message");
         $this->assertEquals("aa747c502a898200f9e4fa21bac68136f886a0e27aec70ba06daf2e2a5cb5597", $client->secureModeHash($user));
     }
-    
+
     public function testLoggerInterfaceWarn()
     {
         // Use LoggerInterface impl, instead of concreate Logger from Monolog, to demonstrate the problem with `warn`.
         $logger = $this->getMockBuilder(LoggerInterface::class)->getMock();
-        
+
         $logger->expects(self::atLeastOnce())->method('warning');
-        
+
         $client = new LDClient('secret', [
             'logger' => $logger,
         ]);
-    
+
         $user = new LDUser('');
-        
+
         $client->variation('MyFeature', $user);
     }
-    
+
     private function getPrivateField(&$object, $fieldName)
     {
         $reflection = new \ReflectionClass(get_class($object));
         $field = $reflection->getProperty($fieldName);
         $field->setAccessible(true);
-    
+
         return $field->getValue($object);
     }
 }

@@ -3,8 +3,9 @@
 namespace LaunchDarkly\Tests;
 
 use LaunchDarkly\SemanticVersion;
+use PHPUnit\Framework\TestCase;
 
-class SemanticVersionTest extends \PHPUnit_Framework_TestCase
+class SemanticVersionTest extends TestCase
 {
     public function testCanParseSimpleCompleteVersion()
     {

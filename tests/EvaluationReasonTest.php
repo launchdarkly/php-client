@@ -2,8 +2,9 @@
 namespace LaunchDarkly\Tests;
 
 use LaunchDarkly\EvaluationReason;
+use PHPUnit\Framework\TestCase;
 
-class EvaluationReasonTest extends \PHPUnit_Framework_TestCase
+class EvaluationReasonTest extends TestCase
 {
     public function testOffReasonSerialization()
     {

@@ -6,8 +6,9 @@ use LaunchDarkly\EvaluationDetail;
 use LaunchDarkly\EvaluationReason;
 use LaunchDarkly\FeatureFlag;
 use LaunchDarkly\FeatureFlagsState;
+use PHPUnit\Framework\TestCase;
 
-class FeatureFlagsStateTest extends \PHPUnit_Framework_TestCase
+class FeatureFlagsStateTest extends TestCase
 {
     private static $flag1Json = array(
         'key' => 'key1',
@@ -51,7 +52,7 @@ class FeatureFlagsStateTest extends \PHPUnit_Framework_TestCase
     public function testUnknownFlagReturnsNullValue()
     {
         $state = new FeatureFlagsState(true);
-        
+
         $this->assertNull($state->getFlagValue('key1'));
     }
 

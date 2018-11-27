@@ -3,8 +3,9 @@ namespace LaunchDarkly\Tests;
 
 use LaunchDarkly\EventSerializer;
 use LaunchDarkly\LDUserBuilder;
+use PHPUnit\Framework\TestCase;
 
-class EventSerializerTest extends \PHPUnit_Framework_TestCase
+class EventSerializerTest extends TestCase
 {
     private function getUser()
     {
@@ -13,7 +14,7 @@ class EventSerializerTest extends \PHPUnit_Framework_TestCase
             ->custom(array('bizzle' => 'def', 'dizzle' => 'ghi'))
             ->build();
     }
-    
+
     private function getUserSpecifyingOwnPrivateAttr()
     {
         return (new LDUserBuilder('abc'))
@@ -22,7 +23,7 @@ class EventSerializerTest extends \PHPUnit_Framework_TestCase
             ->privateCustomAttribute('dizzle', 'ghi')
             ->build();
     }
-    
+
     private function getFullUserResult()
     {
         return array(
@@ -31,7 +32,7 @@ class EventSerializerTest extends \PHPUnit_Framework_TestCase
             'custom' => array('bizzle' => 'def', 'dizzle' => 'ghi')
         );
     }
-    
+
     private function getUserResultWithAllAttrsHidden()
     {
         return array(
@@ -39,7 +40,7 @@ class EventSerializerTest extends \PHPUnit_Framework_TestCase
             'privateAttrs' => array('bizzle', 'dizzle', 'firstName')
         );
     }
-    
+
     private function getUserResultWithSomeAttrsHidden()
     {
         return array(
@@ -48,7 +49,7 @@ class EventSerializerTest extends \PHPUnit_Framework_TestCase
             'privateAttrs' => array('bizzle', 'firstName')
         );
     }
-    
+
     private function getUserResultWithOwnSpecifiedAttrHidden()
     {
         return array(
@@ -58,7 +59,7 @@ class EventSerializerTest extends \PHPUnit_Framework_TestCase
             'privateAttrs' => array('dizzle')
         );
     }
-    
+
     private function makeEvent($user)
     {
         return array(
@@ -68,14 +69,14 @@ class EventSerializerTest extends \PHPUnit_Framework_TestCase
             'user' => $user
         );
     }
-    
+
     private function getJsonForUserBySerializingEvent($user)
     {
         $es = new EventSerializer(array());
         $event = $this->makeEvent($user);
         return json_decode($es->serializeEvents(array($event)), true)[0]['user'];
     }
-    
+
     public function testAllUserAttrsSerialized()
     {
         $es = new EventSerializer(array());
@@ -93,7 +94,7 @@ class EventSerializerTest extends \PHPUnit_Framework_TestCase
         $expected = $this->makeEvent($this->getUserResultWithAllAttrsHidden());
         $this->assertEquals(array($expected), json_decode($json, true));
     }
-    
+
     public function testSomeUserAttrsPrivate()
     {
         $es = new EventSerializer(array('private_attribute_names' => array('firstName', 'bizzle')));
@@ -102,7 +103,7 @@ class EventSerializerTest extends \PHPUnit_Framework_TestCase
         $expected = $this->makeEvent($this->getUserResultWithSomeAttrsHidden());
         $this->assertEquals(array($expected), json_decode($json, true));
     }
-    
+
     public function testPerUserPrivateAttr()
     {
         $es = new EventSerializer(array());
@@ -120,7 +121,7 @@ class EventSerializerTest extends \PHPUnit_Framework_TestCase
         $expected = $this->makeEvent($this->getUserResultWithAllAttrsHidden());
         $this->assertEquals(array($expected), json_decode($json, true));
     }
-    
+
     public function testUserKey()
     {
         $builder = new LDUserBuilder("foo@bar.com");
@@ -128,7 +129,7 @@ class EventSerializerTest extends \PHPUnit_Framework_TestCase
         $json = $this->getJsonForUserBySerializingEvent($user);
         $this->assertEquals("foo@bar.com", $json['key']);
     }
-    
+
     public function testEmptyCustom()
     {
         $builder = new LDUserBuilder("foo@bar.com");
@@ -152,7 +153,7 @@ class EventSerializerTest extends \PHPUnit_Framework_TestCase
         $json = $this->getJsonForUserBySerializingEvent($user);
         $this->assertEquals("secondary", $json['secondary']);
     }
-    
+
     public function testUserIP()
     {
         $builder = new LDUserBuilder("foo@bar.com");
@@ -160,7 +161,7 @@ class EventSerializerTest extends \PHPUnit_Framework_TestCase
         $json = $this->getJsonForUserBySerializingEvent($user);
         $this->assertEquals("127.0.0.1", $json['ip']);
     }
-    
+
     public function testUserCountry()
     {
         $builder = new LDUserBuilder("foo@bar.com");
@@ -168,7 +169,7 @@ class EventSerializerTest extends \PHPUnit_Framework_TestCase
         $json = $this->getJsonForUserBySerializingEvent($user);
         $this->assertEquals("US", $json['country']);
     }
-    
+
     public function testUserEmail()
     {
         $builder = new LDUserBuilder("foo@bar.com");
@@ -176,7 +177,7 @@ class EventSerializerTest extends \PHPUnit_Framework_TestCase
         $json = $this->getJsonForUserBySerializingEvent($user);
         $this->assertEquals("foo+test@bar.com", $json['email']);
     }
-    
+
     public function testUserName()
     {
         $builder = new LDUserBuilder("foo@bar.com");
@@ -184,7 +185,7 @@ class EventSerializerTest extends \PHPUnit_Framework_TestCase
         $json = $this->getJsonForUserBySerializingEvent($user);
         $this->assertEquals("Foo Bar", $json['name']);
     }
-    
+
     public function testUserAvatar()
     {
         $builder = new LDUserBuilder("foo@bar.com");
@@ -192,7 +193,7 @@ class EventSerializerTest extends \PHPUnit_Framework_TestCase
         $json = $this->getJsonForUserBySerializingEvent($user);
         $this->assertEquals("http://www.gravatar.com/avatar/1", $json['avatar']);
     }
-    
+
     public function testUserFirstName()
     {
         $builder = new LDUserBuilder("foo@bar.com");
@@ -200,7 +201,7 @@ class EventSerializerTest extends \PHPUnit_Framework_TestCase
         $json = $this->getJsonForUserBySerializingEvent($user);
         $this->assertEquals("Foo", $json['firstName']);
     }
-    
+
     public function testUserLastName()
     {
         $builder = new LDUserBuilder("foo@bar.com");
@@ -208,7 +209,7 @@ class EventSerializerTest extends \PHPUnit_Framework_TestCase
         $json = $this->getJsonForUserBySerializingEvent($user);
         $this->assertEquals("Bar", $json['lastName']);
     }
-    
+
     public function testUserAnonymous()
     {
         $builder = new LDUserBuilder("foo@bar.com");
